@@ -1,0 +1,6 @@
+{
+  "name": "Tableau de Bord Stratégique",
+  "description": "Tableau de bord personnel de suivi de trajectoire stratégique pour Marc-Arthur ASSANVO (PFE SACO, Candidature HEC, Expertise Data).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1245,6 +1245,11 @@
       margin-top: 14px;
     }
 
+    /* Responsive layout classes for mobile & tablets */
+    .mobile-only-filters {
+      display: none;
+    }
+
     /* Responsive navigation bottom bar on small viewports */
     @media (max-width: 1024px) {
       body {
@@ -1261,53 +1266,146 @@
         border-right: none;
         border-top: 1px solid var(--border-color);
         z-index: 1000;
+        background-color: var(--bg-sidebar);
       }
-      .brand, .sidebar-footer {
-        display: none;
+      .brand, .sidebar-footer, .sidebar-pillar-container {
+        display: none !important;
       }
       .nav-links {
         flex-direction: row;
-        justify-content: space-around;
-        padding: 8px;
+        justify-content: flex-start;
+        gap: 6px;
+        padding: 6px 12px;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .nav-links::-webkit-scrollbar {
+        display: none;
       }
       .nav-button {
         flex-direction: column;
         align-items: center;
-        gap: 4px;
-        padding: 8px 4px;
-        font-size: 0.65rem;
-        flex: 1;
-        min-width: 50px;
+        justify-content: center;
+        gap: 3px;
+        padding: 6px 10px;
+        font-size: 0.625rem;
+        flex-shrink: 0;
+        min-width: 82px;
+        border-radius: 8px;
+        border: none;
+        background: transparent;
+        transition: all 0.2s;
       }
       .nav-button svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
       }
       .nav-button.active {
-        box-shadow: inset 0 -3px 0 var(--color-data);
+        box-shadow: none;
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--color-data) !important;
       }
       main {
         margin-left: 0;
-        margin-bottom: 80px; /* Space for footer menu */
+        margin-bottom: 75px; /* Space for footer menu */
       }
       header {
         position: static;
         padding: 12px 16px;
       }
       .kpis {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
         gap: 8px;
       }
       .kpi-card:nth-child(7) {
-        grid-column: span 3;
+        grid-column: span 1 !important;
       }
       .content-area {
-        padding: 16px;
+        padding: 12px;
       }
-      .grid-2, .grid-3, .cert-grid, .agenda-grid {
-        grid-template-columns: 1fr;
+      .grid-2, .grid-3, .cert-grid, .agenda-grid, .calendar-layout {
+        grid-template-columns: 1fr !important;
         gap: 16px;
+      }
+      .mobile-only-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px 14px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        margin: 0 12px 12px 12px;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .calendar-day-box {
+        min-height: 55px !important;
+        padding: 4px !important;
+      }
+      .calendar-grid-header {
+        font-size: 0.65rem !important;
+        gap: 4px !important;
+      }
+      .calendar-day-num {
+        font-size: 0.75rem !important;
+        width: 20px !important;
+        height: 20px !important;
+        line-height: 20px !important;
+      }
+      .cal-event-dot {
+        font-size: 0 !important;
+        width: 6px !important;
+        height: 6px !important;
+        min-width: 6px !important;
+        border-radius: 50% !important;
+        display: inline-block !important;
+        padding: 0 !important;
+        margin: 0 1px !important;
+        border: none !important;
+        line-height: 0 !important;
+        text-decoration: none !important;
+        content: "" !important;
+      }
+      .calendar-day-events {
+        flex-direction: row !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 2px !important;
+        margin-top: 2px !important;
+      }
+      .kpi-card {
+        padding: 8px 12px !important;
+        min-height: 68px !important;
+      }
+      .kpi-value {
+        font-size: 1.1rem !important;
+      }
+      .kpi-title {
+        font-size: 0.6rem !important;
+      }
+      .kpi-sub {
+        font-size: 0.65rem !important;
+      }
+      .admin-table, .score-log-table {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        white-space: nowrap !important;
+      }
+      .card, .chart-card {
+        padding: 16px !important;
+        border-radius: 12px !important;
+      }
+      .screen-header h2 {
+        font-size: 1.35rem !important;
+      }
+      .screen-header p {
+        font-size: 0.8rem !important;
       }
     }
   </style>
@@ -1322,7 +1420,7 @@
     </div>
 
     <!-- Sélecteur de Vue / Filtre Global par Piliers -->
-    <div style="padding: 14px 20px; border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.01);">
+    <div class="sidebar-pillar-container" style="padding: 14px 20px; border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.01);">
       <label style="font-size:0.65rem; text-transform:uppercase; color:var(--text-muted); font-weight:700; letter-spacing:0.05em; display:block; margin-bottom:6px;">Vue active par pilier</label>
       <div style="display:flex; flex-direction:column; gap:4px;" id="sidebar-pillars-selector">
          <!-- Configured dynamically -->
@@ -1443,6 +1541,14 @@
         </div>
       </div>
     </header>
+
+    <!-- Barre de filtrage visible UNIQUEMENT sur mobile / tablette -->
+    <div class="mobile-only-filters">
+       <span style="font-size:0.65rem; text-transform:uppercase; color:var(--text-muted); font-weight:700; width:100%; display:block; margin-bottom:4px; letter-spacing:0.04em;">Filtrer la trajectoire</span>
+       <div id="mobile-pillars-pills" style="display:flex; flex-wrap:wrap; gap:4px; width:100%; align-items:center;">
+          <!-- Dynamically populated touch-friendly pill buttons -->
+       </div>
+    </div>
 
     <!-- Zone de contenu où s'affichent les différentes vues -->
     <div class="content-area">
@@ -2480,7 +2586,7 @@
     // =========================================================================
     function renderSidebarPillarsSelector() {
        const container = document.getElementById("sidebar-pillars-selector");
-       if (!container) return;
+       const mobilePillsContainer = document.getElementById("mobile-pillars-pills");
        
        const items = [
           { key: "PFE", label: "PFE (Barry-Callebaut)", color: "var(--color-pfe)" },
@@ -2488,21 +2594,63 @@
           { key: "DATA", label: "Data & Suivi-Éval", color: "var(--color-data)" }
        ];
        
-       container.innerHTML = items.map(item => {
-          const isChecked = activePillars.includes(item.key);
-          return `
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:2px 0;">
-               <div style="display:flex; align-items:center; gap:6px;">
-                  <span style="color:${item.color}; font-size:1.1rem; line-height:1;">●</span>
-                  <span style="font-size:0.75rem; color:var(--text-sub); font-weight:500;">${item.label}</span>
+       if (container) {
+          container.innerHTML = items.map(item => {
+             const isChecked = activePillars.includes(item.key);
+             return `
+               <div style="display:flex; align-items:center; justify-content:space-between; padding:2px 0;">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                     <span style="color:${item.color}; font-size:1.1rem; line-height:1;">●</span>
+                     <span style="font-size:0.75rem; color:var(--text-sub); font-weight:500;">${item.label}</span>
+                  </div>
+                  <input type="checkbox" style="accent-color:${item.color}; width:13px; height:13px; cursor:pointer;" ${isChecked ? "checked" : ""} onchange="togglePillarFilter('${item.key}')">
                </div>
-               <input type="checkbox" style="accent-color:${item.color}; width:13px; height:13px; cursor:pointer;" ${isChecked ? "checked" : ""} onchange="togglePillarFilter('${item.key}')">
-            </div>
+             `;
+          }).join('');
+       }
+       
+       if (mobilePillsContainer) {
+          mobilePillsContainer.innerHTML = items.map(item => {
+             const isChecked = activePillars.includes(item.key);
+             let rgbColor = "59,130,246";
+             if (item.key === "PFE") rgbColor = "0,200,150";
+             if (item.key === "HEC") rgbColor = "245,166,35";
+             return `
+               <button onclick="togglePillarFilter('${item.key}')" 
+                       style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 0.75rem; font-weight: 500; border-radius: 99px; cursor: pointer; border: 1px solid ${isChecked ? item.color : 'var(--border-color)'}; background: ${isChecked ? 'rgba(' + rgbColor + ', 0.12)' : 'rgba(0,0,0,0.2)'}; color: ${isChecked ? '#FFF' : 'var(--text-muted)'}; transition: all 0.2s;">
+                  <span style="color:${item.color}; font-size:1rem; line-height:1;">●</span>
+                  <span>${item.key}</span>
+               </button>
+             `;
+          }).join('') + `
+             <div style="margin-left: auto; display: flex; align-items: center; gap: 4px;">
+                <select id="mobile-custom-view-saved-select" style="font-size:0.75rem; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border-color); padding:4px 8px; border-radius:12px; cursor:pointer;" onchange="switchPillarPreset(this.value)">
+                   <option value="all" ${activePillars.includes("PFE") && activePillars.includes("HEC") && activePillars.includes("DATA") ? "selected" : ""}>Toutes</option>
+                   <option value="pfe_hec" ${activePillars.includes("PFE") && activePillars.includes("HEC") && !activePillars.includes("DATA") ? "selected" : ""}>Double diplôme</option>
+                   <option value="data_only" ${activePillars.includes("DATA") && activePillars.length === 1 ? "selected" : ""}>Data pure</option>
+                   <option value="hec_only" ${activePillars.includes("HEC") && activePillars.length === 1 ? "selected" : ""}>HEC pure</option>
+                   <option value="pfe_only" ${activePillars.includes("PFE") && activePillars.length === 1 ? "selected" : ""}>PFE pure</option>
+                   <option value="custom" ${!["all", "pfe_hec", "data_only", "hec_only", "pfe_only"].includes(getCurrentPresetKey()) ? "selected" : ""}>Custom...</option>
+                </select>
+             </div>
           `;
-       }).join('');
+       }
+       
+       // Sync selects
+       const dSelect = document.getElementById("custom-view-saved-select");
+       if (dSelect) dSelect.value = getCurrentPresetKey();
        
        // Render custom views names under selection
        renderUserCustomViewsList();
+    }
+
+    function getCurrentPresetKey() {
+       if (activePillars.includes("PFE") && activePillars.includes("HEC") && activePillars.includes("DATA")) return "all";
+       if (activePillars.includes("PFE") && activePillars.includes("HEC") && activePillars.length === 2) return "pfe_hec";
+       if (activePillars.includes("DATA") && activePillars.length === 1) return "data_only";
+       if (activePillars.includes("HEC") && activePillars.length === 1) return "hec_only";
+       if (activePillars.includes("PFE") && activePillars.length === 1) return "pfe_only";
+       return "custom";
     }
 
     function togglePillarFilter(pillarKey) {
@@ -3399,7 +3547,12 @@
        if (!sel) return;
 
        // If select has no options yet, populate them
-       if (sel.options.length === 0) {
+       const previousValue = sel.value;
+        sel.innerHTML = TESTS_ADMISSION.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        if (previousValue && TESTS_ADMISSION.some(t => t.id === previousValue)) {
+           sel.value = previousValue;
+        }
+        if (false) {
           sel.innerHTML = TESTS_ADMISSION.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
        }
 
@@ -4220,17 +4373,25 @@
          container.innerHTML = html;
 
       } else if (activeAdminTab === "tests") {
-         let html = `
-           <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:16px;">Configurez les informations globales, les scores attendus et maximaux, ainsi que les étapes prévues :</p>
-         `;
+          let html = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+               <p style="font-size:0.85rem; color:var(--text-muted); margin:0; flex:1; min-width:240px;">Configurez les informations globales, les scores attendus et maximaux, ainsi que les étapes prévues :</p>
+               <button class="btn btn-primary" onclick="adminAddNewTest()">+ Nouveau Test d'Admission</button>
+            </div>
+          `;
+
          
          TESTS_ADMISSION.forEach((test, tIdx) => {
             html += `
               <div class="card" style="padding:16px; margin-bottom:16px; border-color:var(--border-color); background-color:rgba(255,255,255,0.01);">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:10px; flex-wrap:wrap; gap:10px; width: 100%;">
+                     <h4 style="font-family:var(--font-title); font-size:1rem; font-weight:700; color:#FFF; margin:0;">${test.name || 'Nouveau Test'}</h4>
+                     <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem; background-color:rgba(239, 68, 68, 0.15); color:var(--color-danger); border:1px solid rgba(239, 68, 68, 0.3); border-radius:4px;" onclick="adminDeleteTest(${tIdx})">Supprimer ce Test</button>
+                  </div>
                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed var(--border-color);">
                     <div>
                        <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:4px; font-weight:600;">Identifiant unique</label>
-                       <input type="text" value="${test.id}" class="admin-input" disabled style="opacity:0.6; background-color:rgba(0,0,0,0.15); cursor:not-allowed;">
+                       <input type="text" value="${test.id}" class="admin-input" id="admin-test-id-${tIdx}" disabled style="opacity:0.6; background-color:rgba(0,0,0,0.15); cursor:not-allowed;">
                     </div>
                     <div>
                        <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:4px; font-weight:600;">Nom du Test d'Admission</label>
@@ -4253,9 +4414,11 @@
                  <table class="admin-table">
                     <thead>
                        <tr>
-                          <th style="width:50%;">Libellé Session / Étape</th>
-                          <th style="width:25%;">Date Cible</th>
-                          <th style="width:25%;">Type</th>
+                          <th style="width:40%;">Libell&eacute; Session / &Eacute;tape</th>
+                           <th style="width:22%;">Date Cible</th>
+                           <th style="width:23%;">Type</th>
+                           <th style="text-align:right; width:15%;">Action</th>
+
                        </tr>
                     </thead>
                     <tbody>
@@ -4270,9 +4433,13 @@
                            <option value="blanc" ${s.type === 'blanc'?'selected':''}>Session Blanc</option>
                            <option value="simulation" ${s.type === 'simulation'?'selected':''}>Simulation</option>
                            <option value="officiel" ${s.type === 'officiel'?'selected':''}>Passage Officiel</option>
-                           <option value="prep_start" ${s.type === 'prep_start'?'selected':''}>Début de Préparation</option>
-                        </select>
-                     </td>
+                           <option value="prep_start" ${s.type === 'prep_start'?'selected':''}>D&eacute;but de Pr&eacute;paration</option>
+                         </select>
+                      </td>
+                      <td style="text-align:right;">
+                         <button class="btn btn-danger" style="padding:4px 8px; font-size:0.7rem; background-color:rgba(239, 68, 68, 0.12); color:var(--color-danger); border:1px solid rgba(239, 68, 68, 0.2); border-radius:4px;" onclick="adminDeleteTestSession(${tIdx}, ${sIdx})">Supprimer</button>
+                      </td>
+
                   </tr>
                `;
             });
